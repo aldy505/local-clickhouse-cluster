@@ -1,0 +1,6 @@
+<clickhouse>
+    <macros replace="replace">
+        <cluster>localcluster</cluster>
+        <replica>ch1</replica>
+    </macros>
+</clickhouse>

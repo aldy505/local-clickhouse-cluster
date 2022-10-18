@@ -1,0 +1,90 @@
+services:
+  ch1:
+    image: clickhouse/clickhouse-server:22.8.1
+    restart: on-failure:10
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./macro1.xml:/etc/clickhouse-server/config.d/macros.xml
+      - ch1data:/var/lib/clickhouse
+    ports:
+      - '18123:8123'
+      - '19000:9000'
+    ulimits:
+      nproc: 65536
+      nofile:
+        soft: 252144
+        hard: 252144
+    healthcheck:
+      test: wget --spider -q localhost:8123/ping
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+  ch2:
+    image: clickhouse/clickhouse-server:22.8.1
+    restart: on-failure:10
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./macro2.xml:/etc/clickhouse-server/config.d/macros.xml
+      - ch2data:/var/lib/clickhouse
+    ports:
+      - '28123:8123'
+      - '29000:9000'
+    ulimits:
+      nproc: 65536
+      nofile:
+        soft: 252144
+        hard: 252144
+    healthcheck:
+      test: wget --spider -q localhost:8123/ping
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      ch1:
+        condition: service_started
+  ch3:
+    image: clickhouse/clickhouse-server:22.8.1
+    restart: on-failure:10
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./macro3.xml:/etc/clickhouse-server/config.d/macros.xml
+      - ch3data:/var/lib/clickhouse
+    ports:
+      - '38123:8123'
+      - '39000:9000'
+    ulimits:
+      nproc: 65536
+      nofile:
+        soft: 252144
+        hard: 252144
+    healthcheck:
+      test: wget --spider -q localhost:8123/ping
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      ch1:
+        condition: service_started
+  zookeeper:
+    image: zookeeper:3.8.0
+    restart: on-failure:10
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "nc -nz 127.0.0.1 2181" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+volumes:
+  ch1data:
+  ch2data:
+  ch3data:
