@@ -23,8 +23,16 @@
 
     <zookeeper>
         <node>
-            <host>zookeeper</host>
-            <port>2181</port>
+            <host>ch1</host>
+            <port>9181</port>
+        </node>
+        <node>
+            <host>ch2</host>
+            <port>9181</port>
+        </node>
+        <node>
+            <host>ch3</host>
+            <port>9181</port>
         </node>
     </zookeeper>
 

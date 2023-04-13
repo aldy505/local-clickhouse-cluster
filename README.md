@@ -1,6 +1,6 @@
 # Local Clickhouse Cluster with Docker Compose
 
-Sets up a local Clickhouse cluster with 3 nodes (and Zookeeper as a bonus).
+Sets up a local Clickhouse cluster with 3 nodes (with embedded Clickhouse Keeper as a replacement for Zookeeper).
 
 To run it:
 
